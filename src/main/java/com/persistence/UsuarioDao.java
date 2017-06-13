@@ -2,6 +2,9 @@ package com.persistence;
 
 import com.model.Mensaje;
 import com.model.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,27 +13,37 @@ import java.util.List;
 /**
  * Created by Cecilia on 7/6/2017.
  */
+@Repository
 public class UsuarioDao {
+
     Connection c;
 
     /*
     public UsuarioDao(@Value("${db.Name}") String dbName)
     * */
 
-    public UsuarioDao(){
+    @Autowired
+    public UsuarioDao(@Value("${db.username}") String dbUserName,
+                      @Value("${db.name}") String dbName,
+                      @Value("${db.password}") String dbPassword,
+                      @Value("${db.port}") String dbPort,
+                      @Value("${db.host}") String dbHost
+                      ){
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            c = DriverManager.getConnection("jdbc:mysql://localhost:3306/apimail", "usrMail", "666");
-            //                                                "+host+":"+Port+"/+dbName
-
+            this.c = (Connection) DriverManager.getConnection("jdbc:mysql://" +dbHost+ ":" +dbPort+
+                    "/" +dbName+"?serverTimezone=UTC", dbUserName, dbPassword);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public UsuarioDao(){}
+
+
+
     public Usuario getById(int idUsr){
         Usuario usr = new Usuario();
-        ArrayList<Mensaje> list = new ArrayList<Mensaje>();
         try{
             PreparedStatement ps = c.prepareStatement("SELECT * FROM usuarios u WHERE u.id = ?");
             ps.setInt(1,idUsr);
@@ -41,48 +54,50 @@ public class UsuarioDao {
                 String userPass = rs.getString("pasword");
                 String userMail = rs.getString("mail");
 
-                String userRealName = rs.getString("nombre_real");
-                String userSurname = rs.getString("apellido");
-                String userAdress = rs.getString("direccion");
-                Integer userPhone = rs.getInt("telefono");
-                String city = rs.getString("ciudad");
-                String province = rs.getString("provincia");
-                String country = rs.getString("pais");
-
-                usr.setNombre(userRealName);
-                usr.setApellido(userSurname);
-                usr.setCiudad(city);
                 usr.setContrasenia(userPass);
-                usr.setDireccion(userAdress);
                 usr.setDireccion_correo(userMail);
                 usr.setId(userId);
                 usr.setNombreUsuario(userName);
-                usr.setPais(country);
-                usr.setTelefono(userPhone);
-                usr.setProvincia(province);
+
+
             }
-            ps = c.prepareStatement("SELECT * FROM mensajes WHERE receptor = ?");
-            ps.setInt(1,idUsr);
-            ResultSet rst = ps.executeQuery();
-            while(rst.next()){                                              // Traigo todos los mensajes asociados
-                Integer id = rst.getInt("id");
-                String cuerpo = rst.getString("cuerpo");
-                Integer remitente = rst.getInt("remitente");
-                Integer receptor = rst.getInt("receptor");
-                String asunto = rst.getString("asunto");
-                boolean borrado = rst.getBoolean("borrado");
-                boolean leido = rst.getBoolean("leido");
 
-                Mensaje msj = new Mensaje(id,cuerpo,remitente,receptor,asunto,borrado,leido);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return usr;
+    }
 
-                list.add(msj);
+    public Usuario get(String nombreUsuario, String password){
+        Usuario u = new Usuario();
+        try{
+            PreparedStatement ps = c.prepareStatement("select id,mail from usuarios where nombre_usuario = ? and contrasenia = ?");
+            ps.setString(1,nombreUsuario);
+            ps.setString(2,password);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String mail = rs.getString("mail");
+
+                u.setId(id);
+                u.setNombreUsuario(nombreUsuario);
+                u.setDireccion_correo(mail);
+                u.setContrasenia(password);
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        usr.setListaMensajes(list);
-        return usr;
+        return u;
     }
 
-
+    public void save(Usuario u){
+        try{
+            PreparedStatement ps = c.prepareStatement("INSERT INTO usuarios VALUES (NULL, ?, ?, ?)");
+            ps.setString(1,u.getNombreUsuario());
+            ps.setString(2,u.getContrasenia());
+            ps.setString(3,u.getDireccion_correo());
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

@@ -53,7 +53,7 @@ public class SessionData {
 
     @Scheduled(fixedRate = 5000)
     public void checkSessions() {
-        System.out.println("Checking sessions");
+        //System.out.println("Checking sessions");
         Set<String> sessionsId = this.sessionData.keySet();
         for (String sessionId : sessionsId) {
             AuthenticationData aData = this.sessionData.get(sessionId);

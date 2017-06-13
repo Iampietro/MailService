@@ -3,10 +3,10 @@ package com.services;
 import com.model.Usuario;
 import com.persistence.UsuarioDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-/**
- * Created by Cecilia on 8/6/2017.
- */
+
+@Service
 public class UsuarioService {
 
     UsuarioDao usuarioDao;
@@ -16,5 +16,7 @@ public class UsuarioService {
         this.usuarioDao = dao;
     }
 
-
+    public Usuario login(String nombreUsuario, String password) {
+        return usuarioDao.get(nombreUsuario,password);
+    }
 }
