@@ -68,7 +68,7 @@ public class MensajeController {
     }
 
     @RequestMapping(value = "api/mensaje", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
+    public @ResponseBody                                // Ver Enviados
     ResponseEntity<ArrayList<MensajeWrapper>> getSended(@RequestParam("id_remitente") int id_remitente){
         try{
             ArrayList<Mensaje> listMensajes = mensajeService.getSended(id_remitente);

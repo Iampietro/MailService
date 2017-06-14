@@ -96,10 +96,19 @@ public class UsuarioDao {
 
     public void save(Usuario u){
         try{
-            PreparedStatement ps = c.prepareStatement("INSERT INTO usuarios VALUES (NULL, ?, ?, ?)");
+            PreparedStatement ps1 = c.prepareStatement("select MAX(id) as id from personas");
+            ResultSet rs = ps1.executeQuery();
+            int persona_id = 0;
+            while(rs.next()){
+                persona_id = rs.getInt("id");
+            }
+            System.out.println("-----------------------------------------------------------"+persona_id);
+            PreparedStatement ps = c.prepareStatement("INSERT INTO usuarios VALUES (NULL, ?, ?, ?, ?)");
             ps.setString(1,u.getNombreUsuario());
             ps.setString(2,u.getContrasenia());
             ps.setString(3,u.getDireccion_correo());
+            ps.setInt(4,persona_id);
+            ps.execute();
         }catch (SQLException e){
             e.printStackTrace();
         }
