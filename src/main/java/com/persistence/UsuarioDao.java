@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by Cecilia on 7/6/2017.
@@ -30,9 +31,12 @@ public class UsuarioDao {
                       @Value("${db.host}") String dbHost
                       ){
         try {
+            /*TimeZone t = TimeZone.getTimeZone("GMT-300");
+            TimeZone.setDefault(t);*/
             Class.forName("com.mysql.jdbc.Driver");
             this.c = (Connection) DriverManager.getConnection("jdbc:mysql://" +dbHost+ ":" +dbPort+
                     "/" +dbName+"?serverTimezone=UTC", dbUserName, dbPassword);
+            //+"?serverTimezone=UTC"
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -51,7 +51,7 @@ public class UsuarioController {
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
-    @RequestMapping(value = "/Api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity saveUsr (@RequestBody PersonaRequest req){
         try{
             personaService.newPersona(req.getNombre(),req.getApellido(),req.getDireccion(),req.getTelefono(),
@@ -62,7 +62,7 @@ public class UsuarioController {
         }
     }
 
-    /*@RequestMapping(value = "/Api", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/api", method = RequestMethod.GET)
     public @ResponseBody ResponseEntity<PersonaWrapper> getByName (@RequestParam ("name") String name){
 
     }*/
