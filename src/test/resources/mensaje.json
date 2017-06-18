@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "cuerpo": "este va a ser el mensaje mas cool del 2017",
+  "id_remitente": 1,
+  "id_receptor": 3,
+  "asunto": "¿Has pensado bien ultimamente?",
+  "borrado": false,
+  "leido": false
+}

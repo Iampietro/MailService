@@ -2,6 +2,7 @@ package com.persistence;
 
 import com.model.Mensaje;
 import com.model.Usuario;
+import com.response.UsuarioWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -102,12 +103,61 @@ public class UsuarioDao {
             while(rs.next()){
                 persona_id = rs.getInt("id");
             }
-            System.out.println("-----------------------------------------------------------"+persona_id);
             PreparedStatement ps = c.prepareStatement("INSERT INTO usuarios VALUES (NULL, ?, ?, ?, ?)");
             ps.setString(1,u.getNombreUsuario());
             ps.setString(2,u.getContrasenia());
             ps.setString(3,u.getDireccion_correo());
             ps.setInt(4,persona_id);
+            ps.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public UsuarioWrapper getByName(String name) {
+        UsuarioWrapper u = new UsuarioWrapper();
+        try{
+            PreparedStatement ps = c.prepareStatement("select * from usuarios u join personas p on u.persona_id = p.id where u.nombre_usuario = ?");
+            ps.setString(1,name);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                u.setNombre(rs.getString("nombre_real"));
+                u.setApellido(rs.getString("apellido"));
+                u.setDireccion(rs.getString("direccion"));
+                u.setTelefono(rs.getInt("telefono"));
+                u.setCiudad(rs.getString("ciudad"));
+                u.setProvincia(rs.getString("provincia"));
+                u.setPais(rs.getString("pais"));
+                u.setMail(rs.getString("mail"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return u;
+    }
+
+
+    public ArrayList<UsuarioWrapper> getAll() {
+        ArrayList<UsuarioWrapper> listUsers = new ArrayList<UsuarioWrapper>();
+        try{
+            PreparedStatement ps = c.prepareStatement("select * from usuarios u join personas p on u.persona_id = p.id");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                UsuarioWrapper usuarioWrapper = new UsuarioWrapper(rs.getString("nombre_real"), rs.getString("apellido"),
+                        rs.getString("direccion"), rs.getInt("telefono"), rs.getString("ciudad"), rs.getString("provincia"),
+                        rs.getString("pais"), rs.getString("mail"));
+                listUsers.add(usuarioWrapper);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return listUsers;
+    }
+
+    public void deleteUser(int id_usrToDelete) {
+        try{
+            PreparedStatement ps = c.prepareStatement("delete from usuarios where id = ?");
+            ps.setInt(1,id_usrToDelete);
             ps.execute();
         }catch (SQLException e){
             e.printStackTrace();

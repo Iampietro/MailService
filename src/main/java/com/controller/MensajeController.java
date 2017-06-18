@@ -63,7 +63,7 @@ public class MensajeController {
             ArrayList<Mensaje> listMensajes = mensajeService.getInbox(id_receptor);
             return new ResponseEntity<ArrayList<MensajeWrapper>> (this.convertList(listMensajes), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.BAD_REQUEST);
         }
     }
 
