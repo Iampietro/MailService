@@ -1,5 +1,6 @@
 package com.controller;
 
+
 import com.App;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -36,6 +37,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
+
 
 /**
  * Created by Cecilia on 17/6/2017.
@@ -110,17 +114,8 @@ public class UserControllerTest extends TestCase{
                 .param("name", user.getNombreUsuario())
         )
                 .andExpect(status().isOk());
-    } // Traer por Nombre
-
-    @Test
-    public void testGetUserByNameFail() throws Exception{
-        mockMvc.perform(
-                get("/api/user")
-                .header("sessionid", this.sessionid)
-                .param("name", "")
-        )
-                .andExpect(status().isNoContent());
     }
+
 
     @Test
     public void testDeleteUsr() throws Exception{
@@ -142,7 +137,6 @@ public class UserControllerTest extends TestCase{
                 .andExpect(status().isFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
-
 
     @Test
     public void testDeleteUserBadRequest() throws Exception{
@@ -168,18 +162,6 @@ public class UserControllerTest extends TestCase{
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void testLoginForbbiden() throws Exception{
-        mockMvc.perform(
-                post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(EntityUtils.toString(new UrlEncodedFormEntity(asList(
-                                new BasicNameValuePair("user", "2"),
-                                new BasicNameValuePair("pwd", "cualquieraLoco")
-                        ))))
-        )
-                .andExpect(status().isForbidden());
-    }
 
     @Test
     public void testLogOUtOk() throws Exception{
@@ -189,6 +171,30 @@ public class UserControllerTest extends TestCase{
 
         )
                 .andExpect(status().isAccepted());
+    }
+
+    @Test
+    public void shouldReturnHttpCode405OnPUT() throws Exception{
+        mockMvc.perform(
+                put("/api/user")
+        )
+                .andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    public void shouldReturnHttpCode400PostWithoutParameter() throws Exception{
+        mockMvc.perform(
+                post("/login")
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldReturn400getByNameWithoutParameter() throws Exception{
+        mockMvc.perform(
+                get("/api/user")
+        )
+                .andExpect(status().isBadRequest());
     }
 
 }

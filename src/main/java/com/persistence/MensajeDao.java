@@ -46,17 +46,17 @@ public class MensajeDao{
     }
 
 
-    public void delete(int id_mensaje)  {
+    public void delete(int id_mensaje) throws SQLException{
         try{
             PreparedStatement ps = c.prepareStatement("update mensajes set borrado = true where id = ?");
             ps.setInt(1,id_mensaje);
             ps.execute();
         }catch (SQLException e){
-            e.printStackTrace();
+            throw e;
         }
     }
 
-    public ArrayList<Mensaje> getDeleted(int id_receptor) {
+    public ArrayList<Mensaje> getDeleted(int id_receptor) throws SQLException {
         ArrayList<Mensaje> listMensajes = new ArrayList<Mensaje>();
         try{
             PreparedStatement ps = c.prepareStatement("select * from mensajes where receptor = ? and borrado = true");
@@ -71,7 +71,7 @@ public class MensajeDao{
                 listMensajes.add(m);
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            throw e;
         }
         return listMensajes;
     }

@@ -50,17 +50,26 @@ public class MensajeController {
     ResponseEntity<ArrayList<MensajeWrapper>> getDeleted (@RequestParam("id_receptor") int id_receptor){
         try{
             ArrayList<Mensaje> listMensajes = mensajeService.getDeleted(id_receptor);
+            if (listMensajes.isEmpty()){
+                return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.NO_CONTENT);
+            }
             return  new ResponseEntity<ArrayList<MensajeWrapper>>(this.convertList(listMensajes) ,HttpStatus.OK);
         }catch (Exception e){
-            return  new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.NO_CONTENT);
+            return  new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**En los metodos que delimitan a este comentario, si la lista esta vacia devuelvo no content, aunque el id
+     * del usuario no referencie a un usuario existente, porque en el futuro desarrollo de la aplicacion se garantizará que
+     * el id pasado se corresponda con un usuario valido.
+     * */
     @RequestMapping(value = "api/mensaje/inbox", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody                                // Ver Recibidos
     ResponseEntity<ArrayList<MensajeWrapper>> getInbox (@RequestParam("id_receptor") int id_receptor){
         try{
             ArrayList<Mensaje> listMensajes = mensajeService.getInbox(id_receptor);
+            if (listMensajes.isEmpty()){
+                return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.NO_CONTENT);
+            }
             return new ResponseEntity<ArrayList<MensajeWrapper>> (this.convertList(listMensajes), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.BAD_REQUEST);
@@ -69,7 +78,7 @@ public class MensajeController {
 
     @RequestMapping(value = "api/mensaje", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody                                // Ver Enviados
-    ResponseEntity<ArrayList<MensajeWrapper>> getSended(@RequestParam("id_remitente") int id_remitente){
+    ResponseEntity<ArrayList<MensajeWrapper>> getSended(@RequestParam(value = "id_remitente") int id_remitente){
         try{
             ArrayList<Mensaje> listMensajes = mensajeService.getSended(id_remitente);
             return new ResponseEntity<ArrayList<MensajeWrapper>>(this.convertList(listMensajes), HttpStatus.OK);

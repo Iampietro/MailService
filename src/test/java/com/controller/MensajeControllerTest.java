@@ -108,6 +108,16 @@ public class MensajeControllerTest extends TestCase{
     }
 
     @Test
+    public void testGetSendFail() throws Exception {
+        mockMvc.perform(
+                get("/api/mensaje")
+                        .header("sessionid", this.sessionid)
+                        .param("id_remitente", "caca")
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void testDeleteMessageOk() throws Exception {
         mockMvc.perform((
                         delete("/api/mensaje")
@@ -130,6 +140,19 @@ public class MensajeControllerTest extends TestCase{
                         .content(json)
         )
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testSendMessageFail() throws Exception {
+        URL url  = Resources.getResource("mensaje.json");
+        String json = Resources.toString(url, Charsets.UTF_8);
+
+        mockMvc.perform(
+                post("/api/mensaje")
+                        .header("sessionid", this.sessionid)
+
+        )
+                .andExpect(status().isBadRequest());
     }
 
     @Test

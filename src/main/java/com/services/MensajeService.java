@@ -23,16 +23,20 @@ public class MensajeService {
         mensajeDao.save(mensaje);
     }
 
-    public void delete(int id_mensaje)  {
+    public void delete(int id_mensaje) throws Exception {
         try {
             mensajeDao.delete(id_mensaje);
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw e;
         }
     }
 
-    public ArrayList<Mensaje> getDeleted(int id_receptor) {
-        return mensajeDao.getDeleted(id_receptor);
+    public ArrayList<Mensaje> getDeleted(int id_receptor) throws Exception {
+        try {
+            return mensajeDao.getDeleted(id_receptor);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     public ArrayList<Mensaje> getInbox(int id_receptor) {

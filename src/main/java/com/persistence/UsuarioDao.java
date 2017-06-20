@@ -73,7 +73,7 @@ public class UsuarioDao {
         return usr;
     }
 
-    public Usuario get(String nombreUsuario, String password){
+    public Usuario get(String nombreUsuario, String password) throws SQLException{
         Usuario u = new Usuario();
         try{
             PreparedStatement ps = c.prepareStatement("select id,mail from usuarios where nombre_usuario = ? and contrasenia = ?");
@@ -90,7 +90,7 @@ public class UsuarioDao {
                 u.setContrasenia(password);
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            throw e;
         }
         return u;
     }
@@ -114,7 +114,7 @@ public class UsuarioDao {
         }
     }
 
-    public UsuarioWrapper getByName(String name) {
+    public UsuarioWrapper getByName(String name) throws SQLException {
         UsuarioWrapper u = new UsuarioWrapper();
         try{
             PreparedStatement ps = c.prepareStatement("select * from usuarios u join personas p on u.persona_id = p.id where u.nombre_usuario = ?");
@@ -131,7 +131,7 @@ public class UsuarioDao {
                 u.setMail(rs.getString("mail"));
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            throw e;
         }
         return u;
     }
