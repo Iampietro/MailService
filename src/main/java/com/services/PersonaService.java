@@ -24,15 +24,6 @@ public class PersonaService {
         this.personaDao = personaDao;
     }
 
-    public ArrayList<Persona> getAll() {
-        return personaDao.getAll();
-    }
-
-
-    public Persona getPersona(int id) {
-        return personaDao.getById(id);
-    }
-
     public void newPersona(String nombre, String apellido, String direccion,
                            int telefono, String ciu, String prov, String pa,
     String nombreUsuario, String pass, String correo) {

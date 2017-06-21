@@ -4,6 +4,7 @@ import com.model.Persona;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.text.ParseException;
@@ -13,6 +14,7 @@ import java.text.ParseException;
  */
 public class PersonaTest extends TestCase {
 
+    @Autowired
     Persona persona;
 
     @Before

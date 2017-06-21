@@ -21,61 +21,6 @@ public class PersonaDao {
         }
     }
 
-    public Persona getById(int idPers){
-        Persona p = new Persona();
-
-        try{
-            PreparedStatement ps = c.prepareStatement("SELECT * FROM personas u WHERE u.id = ?");
-            ps.setInt(1,idPers);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Integer id = rs.getInt("id");
-                String userRealName = rs.getString("nombre_real");
-                String userSurname = rs.getString("apellido");
-                String userAdress = rs.getString("direccion");
-                Integer userPhone = rs.getInt("telefono");
-                String city = rs.getString("ciudad");
-                String province = rs.getString("provincia");
-                String country = rs.getString("pais");
-
-                p.setId(id);
-                p.setNombre(userRealName);
-                p.setApellido(userSurname);
-                p.setCiudad(city);
-                p.setDireccion(userAdress);
-                p.setPais(country);
-                p.setTelefono(userPhone);
-                p.setProvincia(province);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return p;
-    }
-
-   public ArrayList<Persona> getAll() {
-        ArrayList<Persona> personas = new ArrayList<Persona>();
-        try{
-            PreparedStatement ps  = c.prepareStatement("SELECT * FROM personas");
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                int id = rs.getInt("id");
-                String nombre = rs.getString("nombre_real");
-                String ape = rs.getString("apellido");
-                String dire = rs.getString("direccion");
-                Integer tel = rs.getInt("telefono");
-                String ciu = rs.getString("ciudad");
-                String prov = rs.getString("provincia");
-                String pa = rs.getString("pais");
-
-                Persona unaP = new Persona(id, nombre, ape, dire, tel, ciu, prov, pa);
-                personas.add(unaP);
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return personas;
-    }
 
     public void save(Persona p ) {
             try {
