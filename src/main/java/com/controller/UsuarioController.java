@@ -3,12 +3,10 @@ package com.controller;
 import com.model.Usuario;
 import com.request.PersonaRequest;
 import com.response.LoginResponseWrapper;
-import com.response.PersonaWrapper;
 import com.response.UsuarioWrapper;
 import com.services.PersonaService;
 import com.services.UsuarioService;
 import com.util.SessionData;
-import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,7 +44,7 @@ public class UsuarioController {
         }
         if (u.getDireccion_correo().equals(""))
         {
-            return new ResponseEntity<LoginResponseWrapper>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<LoginResponseWrapper>(HttpStatus.FORBIDDEN);
         }
         if (null != u) {
             String sessionId = sessionData.addSession(u);

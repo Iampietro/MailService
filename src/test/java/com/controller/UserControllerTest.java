@@ -6,6 +6,8 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.model.Persona;
 import com.model.Usuario;
+import com.response.UsuarioWrapper;
+import com.services.UsuarioService;
 import com.util.SessionData;
 import junit.framework.TestCase;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -24,8 +26,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import static java.util.Arrays.asList;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -56,6 +62,9 @@ public class UserControllerTest extends TestCase{
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    UsuarioService usuarioService;
 
     private MockMvc mockMvc;
     private String sessionid;
@@ -148,6 +157,12 @@ public class UserControllerTest extends TestCase{
     }
 
     @Test
+    public void testListarUsuariosNoContent() throws Exception {
+        usuarioService = mock(UsuarioService.class);
+        when(usuarioService.getAll()).thenReturn(new ArrayList<UsuarioWrapper>());
+    }
+
+    @Test
     public void testDeleteUserBadRequest() throws Exception{
 
         mockMvc.perform(delete
@@ -172,17 +187,18 @@ public class UserControllerTest extends TestCase{
     }
 
     @Test
-    public void testLoginNoContent() throws Exception{
+    public void testLoginForbidden() throws Exception{
         mockMvc.perform(
                 post("/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content(EntityUtils.toString(new UrlEncodedFormEntity(asList(
-                                new BasicNameValuePair("user", "shitshitshit"),
-                                new BasicNameValuePair("pwd", "SinDoesNotExists")
+                                new BasicNameValuePair("user", "EstoDeberiaFallar"),
+                                new BasicNameValuePair("pwd", "HopeSo")
                         ))))
         )
-                .andExpect(status().isNoContent());
+                .andExpect(status().isForbidden());
     }
+
 
     @Test
     public void testLogOUtOk() throws Exception{
@@ -217,6 +233,12 @@ public class UserControllerTest extends TestCase{
         )
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void checkSessionTest() throws Exception {
+        this.sessionData.checkSessions();
+    }
+
 
 
 

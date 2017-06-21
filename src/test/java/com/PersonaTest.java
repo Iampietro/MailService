@@ -40,6 +40,15 @@ public class PersonaTest extends TestCase {
         assertEquals("Checking apellido getter", persona.getApellido(), "Iampietro");
     }
 
+    @Test
+    public void testTelefono(){
+        assertEquals((Integer)4937214,persona.getTelefono());
+    }
+
+    @Test
+    public void testId(){
+        assertEquals((Integer)1, persona.getId());
+    }
 
     @Test
     public void testPais(){
