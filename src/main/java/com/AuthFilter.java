@@ -59,6 +59,7 @@ public class AuthFilter extends OncePerRequestFilter{
             headerMap.put(name, value);
         }
 
+        /*
         @Override
         public String getHeader(String name) {
             String headerValue = super.getHeader(name);
@@ -68,9 +69,7 @@ public class AuthFilter extends OncePerRequestFilter{
             return headerValue;
         }
 
-        /**
-         * get the Header names
-         */
+
         @Override
         public Enumeration<String> getHeaderNames() {
             List<String> names = Collections.list(super.getHeaderNames());
@@ -88,6 +87,6 @@ public class AuthFilter extends OncePerRequestFilter{
             }
             return Collections.enumeration(values);
         }
-
+        */
     }
 }
