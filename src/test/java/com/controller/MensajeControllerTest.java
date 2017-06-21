@@ -4,6 +4,7 @@ import com.App;
 import com.model.Mensaje;
 import com.model.Persona;
 import com.model.Usuario;
+import com.response.MensajeWrapper;
 import com.util.SessionData;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import java.net.URL;
+import java.util.ArrayList;
+
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -63,8 +66,8 @@ public class MensajeControllerTest extends TestCase{
         mensaje.setAsunto("Asunto gravísimo con la grabación.");
         mensaje.setBorrado(false);
         mensaje.setCuerpo("Oie macarena");
-        mensaje.setId_receptor(1);
-        mensaje.setId_remitente(3);
+        mensaje.setReceptor("puta@gmail.com");
+        mensaje.setRemitente("putas@gmail.com");
         mensaje.setLeido(false);
 
         this.sessionid = this.sessionData.addSession(usuario);
@@ -80,14 +83,24 @@ public class MensajeControllerTest extends TestCase{
         mockMvc.perform(
                 get("/api/mensaje/inbox")
                         .header("sessionid", this.sessionid)
-                        .param("id_receptor", mensaje.getId_receptor().toString())
+                        .param("id_receptor", "7")
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
-    public void testGetInboxFail() throws Exception{
+    public void testGetInboxNoContent() throws Exception{
+        mockMvc.perform(
+                get("/api/mensaje/inbox")
+                    .header("sessionid",this.sessionid)
+                    .param("id_receptor", "14")
+        )
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testGetInboxBadRequest() throws Exception{
         mockMvc.perform(
                 get("/api/mensaje/inbox")
                 .header("sessionid", this.sessionid)
@@ -101,14 +114,24 @@ public class MensajeControllerTest extends TestCase{
         mockMvc.perform(
                 get("/api/mensaje")
                         .header("sessionid", this.sessionid)
-                        .param("id_remitente", mensaje.getId_remitente().toString())
+                        .param("id_remitente", "2")
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
-    public void testGetSendFail() throws Exception {
+    public void testGetSendNoContent() throws Exception{
+        mockMvc.perform(
+                get("/api/mensaje")
+                    .header("sessionid", this.sessionid)
+                    .param("id_remitente", "25")
+        )
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testGetSendBadRequest() throws Exception {
         mockMvc.perform(
                 get("/api/mensaje")
                         .header("sessionid", this.sessionid)
@@ -129,6 +152,17 @@ public class MensajeControllerTest extends TestCase{
     }
 
     @Test
+    public void testDeleteMessageBadRequest() throws Exception {
+        mockMvc.perform((
+                        delete("/api/mensaje")
+                                .header("sessionid", this.sessionid)
+                                .param("id_msj", "whatever")
+                )
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void testSendMessageOk() throws Exception {
         URL url  = Resources.getResource("mensaje.json");
         String json = Resources.toString(url, Charsets.UTF_8);
@@ -143,7 +177,7 @@ public class MensajeControllerTest extends TestCase{
     }
 
     @Test
-    public void testSendMessageFail() throws Exception {
+    public void testSendMessageBadRequest() throws Exception {
         URL url  = Resources.getResource("mensaje.json");
         String json = Resources.toString(url, Charsets.UTF_8);
 
@@ -160,13 +194,22 @@ public class MensajeControllerTest extends TestCase{
         mockMvc.perform(
                 get("/api/mensaje/trash")
                 .header("sessionid", this.sessionid)
-                .param("id_receptor", mensaje.getId_receptor().toString())
+                .param("id_receptor", "2")
 
         )
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void testGetTrashNoContent() throws Exception{
+        mockMvc.perform(
+                get("/api/mensaje/trash")
+                        .header("sessionid", this.sessionid)
+                        .param("id_receptor", "33")
 
+        )
+                .andExpect(status().isNoContent());
+    }
 
 
 }

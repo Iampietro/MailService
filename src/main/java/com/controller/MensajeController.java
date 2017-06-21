@@ -26,7 +26,7 @@ public class MensajeController {
     @RequestMapping(value = "/api/mensaje", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity send (@RequestBody Mensaje msj){    // ENVIAR MENSAJE
-        try{
+        try{                                            // Deben ingresarse mails validos
             mensajeService.save(msj);
             return new ResponseEntity(HttpStatus.CREATED);
         }catch (Exception e){
@@ -70,9 +70,9 @@ public class MensajeController {
             if (listMensajes.isEmpty()){
                 return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<ArrayList<MensajeWrapper>> (this.convertList(listMensajes), HttpStatus.OK);
+            return new ResponseEntity<ArrayList<MensajeWrapper>>(this.convertList(listMensajes), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -81,9 +81,12 @@ public class MensajeController {
     ResponseEntity<ArrayList<MensajeWrapper>> getSended(@RequestParam(value = "id_remitente") int id_remitente){
         try{
             ArrayList<Mensaje> listMensajes = mensajeService.getSended(id_remitente);
+            if (listMensajes.isEmpty()){
+                return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.NO_CONTENT);
+            }
             return new ResponseEntity<ArrayList<MensajeWrapper>>(this.convertList(listMensajes), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<ArrayList<MensajeWrapper>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

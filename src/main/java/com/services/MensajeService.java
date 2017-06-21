@@ -3,6 +3,7 @@ package com.services;
 
 import com.model.Mensaje;
 import com.persistence.MensajeDao;
+import com.response.MensajeWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

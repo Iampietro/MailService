@@ -1,5 +1,9 @@
 package com.model;
 
+import org.joda.time.DateTime;
+
+import java.sql.Date;
+
 /**
  * Created by Cecilia on 6/6/2017.
  */
@@ -7,28 +11,28 @@ public class Mensaje {
 
     private Integer id;
     private String cuerpo;
-    private Integer id_remitente;
-    private Integer id_receptor;
+    private String remitente;
+    private String receptor;
     private String asunto;
     private boolean borrado;
     private boolean leido;
 
-    public Mensaje(Integer id, String cuerpo, Integer id_remitente,
-                   Integer id_receptor, String asunto, boolean borrado, boolean leido) {
+    public Mensaje(Integer id, String cuerpo, String id_remitente,
+                   String id_receptor, String asunto, boolean borrado, boolean leido) {
         this.id = id;
         this.cuerpo = cuerpo;
-        this.id_remitente = id_remitente;
-        this.id_receptor = id_receptor;
+        this.remitente = id_remitente;
+        this.receptor = id_receptor;
         this.asunto = asunto;
         this.borrado = borrado;
         this.leido = leido;
     }
 
-    public Mensaje(String cuerpo, Integer id_remitente,
-                   Integer id_receptor, String asunto){
+    public Mensaje(String cuerpo, String id_remitente,
+                   String id_receptor, String asunto){
         this.cuerpo = cuerpo;
-        this.id_remitente = id_remitente;
-        this.id_receptor = id_receptor;
+        this.remitente = id_remitente;
+        this.receptor = id_receptor;
         this.asunto = asunto;
     }
 
@@ -50,20 +54,20 @@ public class Mensaje {
         this.cuerpo = cuerpo;
     }
 
-    public Integer getId_remitente() {
-        return id_remitente;
+    public String getRemitente() {
+        return remitente;
     }
 
-    public void setId_remitente(Integer id_remitente) {
-        this.id_remitente = id_remitente;
+    public void setRemitente(String remitente) {
+        this.remitente = remitente;
     }
 
-    public Integer getId_receptor() {
-        return id_receptor;
+    public String getReceptor() {
+        return receptor;
     }
 
-    public void setId_receptor(Integer id_receptor) {
-        this.id_receptor = id_receptor;
+    public void setReceptor(String receptor) {
+        this.receptor = receptor;
     }
 
     public String getAsunto() {

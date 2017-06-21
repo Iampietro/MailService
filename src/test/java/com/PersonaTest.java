@@ -28,10 +28,7 @@ public class PersonaTest extends TestCase {
         persona.setDireccion("Alvear y O'Higgins");
     }
 
-    @Test
-    public void testId(){
-        assertEquals("Checking id getter", persona.getId(), "1");
-    }
+
 
     @Test
     public void testNombre(){
@@ -43,10 +40,6 @@ public class PersonaTest extends TestCase {
         assertEquals("Checking apellido getter", persona.getApellido(), "Iampietro");
     }
 
-    @Test
-    public void testTelefono(){
-        assertEquals("Checking telefono getter", persona.getTelefono(), "4937214");
-    }
 
     @Test
     public void testPais(){

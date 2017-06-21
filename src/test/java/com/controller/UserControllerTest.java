@@ -104,18 +104,27 @@ public class UserControllerTest extends TestCase{
         )
                 .andExpect(status().isCreated());
 
-    } // Agregar Usuario
+    }
 
     @Test
     public void testGetUserByNameOk() throws Exception{
         mockMvc.perform(
                 get("/api/user")
                 .header("sessionid", this.sessionid)
-                .param("name", user.getNombreUsuario())
+                .param("name", "this")
         )
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void testGetUserByNameNoContent() throws Exception{
+        mockMvc.perform(
+                get("/api/user")
+                        .header("sessionid", this.sessionid)
+                        .param("name", "throughout")
+        )
+                .andExpect(status().isNoContent());
+    }
 
     @Test
     public void testDeleteUsr() throws Exception{
@@ -134,7 +143,7 @@ public class UserControllerTest extends TestCase{
                 .header("sessionid", this.sessionid)
 
         )
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
@@ -156,12 +165,24 @@ public class UserControllerTest extends TestCase{
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content(EntityUtils.toString(new UrlEncodedFormEntity(asList(
                                 new BasicNameValuePair("user", "NombreCool"),
-                                new BasicNameValuePair("pwd", "666")
+                                new BasicNameValuePair("pwd", "213")
                         ))))
         )
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void testLoginNoContent() throws Exception{
+        mockMvc.perform(
+                post("/login")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content(EntityUtils.toString(new UrlEncodedFormEntity(asList(
+                                new BasicNameValuePair("user", "shitshitshit"),
+                                new BasicNameValuePair("pwd", "SinDoesNotExists")
+                        ))))
+        )
+                .andExpect(status().isNoContent());
+    }
 
     @Test
     public void testLogOUtOk() throws Exception{
@@ -196,5 +217,7 @@ public class UserControllerTest extends TestCase{
         )
                 .andExpect(status().isBadRequest());
     }
+
+
 
 }

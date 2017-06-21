@@ -1,6 +1,9 @@
 package com.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
+
+import java.util.Date;
 
 /**
  * Created by Cecilia on 14/6/2017.
@@ -13,6 +16,14 @@ public class MensajeWrapper {
     private String cuerpo;
     @JsonProperty
     private boolean leido;
+
+    public MensajeWrapper(String asunto, String cuerpo, boolean leido) {
+        this.asunto = asunto;
+        this.cuerpo = cuerpo;
+        this.leido = leido;
+    }
+
+    public MensajeWrapper(){}
 
     public String getAsunto() {
         return asunto;
